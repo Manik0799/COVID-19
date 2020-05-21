@@ -1,0 +1,171 @@
+<%- include("header") -%>
+
+<section id="countryInfo">
+
+  <div class="container-fluid">
+    <div class="row" style="font-family: 'Noto Sans TC', sans-serif;">
+
+      <div class="col-lg-6">
+        <img src="https://www.countryflags.io/<%=code%>/shiny/64.png" style="width: 20%; height: 40%;">
+        <h1><%= countryCoronaData.data.name.toUpperCase()%></h1>
+        <br>
+        <p style="font-size: 1.3em;">Population : <%= countryCoronaData.data.population.toLocaleString() %></p>
+      </div>
+
+      <div class="col-lg-6">
+      <!-- PIE CHART DATA -->
+          <canvas id="piechart" width="13" height="7" style="background: rgba(133, 147, 152, 0.3);"></canvas>
+          <script>
+
+             let confirmedCases= '<%- countryCoronaData.data.latest_data.confirmed %>';
+             let deathCases= '<%- countryCoronaData.data.latest_data.deaths %>';
+             let recoveredCases= '<%- countryCoronaData.data.latest_data.recovered %>';
+
+             var ctx = document.getElementById("piechart").getContext('2d');
+             var myChart = new Chart(ctx, {
+              type: 'doughnut',
+              data: {
+                  labels: ["Confirmed", "Recovered", "Death"],
+                  datasets: [{
+                      label: 'COVID-19 cases',
+                      data: [confirmedCases, recoveredCases, deathCases],
+                      backgroundColor: [
+                      'rgba(50, 99, 200, 0.7)',
+                      'rgba(105, 200, 132, 0.7)',
+                      'rgba(184, 11, 51, 0.7)'
+                      ],
+                      borderColor: [
+                        'rgba(0,0,0,0.3)',
+                        'rgba(0,0,0,0.3)',
+                        'rgba(0,0,0,0.3)'
+                      ],
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                legend:{
+                  labels:{
+                    fontColor: "black"
+                  }
+                }
+              }
+          });
+          </script>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Container 1 ends -->
+
+
+<!-- Container 2 starts -->
+  <div class="container-fluid mt-2">
+    <div class="row">
+      <div class="col-xl-6 col-lg-12 col-md-12">
+
+        <!-- LINE CHART DATA -->
+          <canvas id="chart" width="10" height="7"></canvas>
+          <script>
+
+             let CaseNumbers=[];
+             let CaseDates=[];
+             let obj= '<%- JSON.stringify(countryCoronaData) %>';
+             obj= JSON.parse(obj);
+
+             for(var i=30;i>=0;i--){
+                 CaseNumbers.push(obj.data.timeline[i].confirmed);
+                 CaseDates.push(obj.data.timeline[i].date);
+             }
+
+
+          var ctx = document.getElementById("chart").getContext('2d');
+          var myChart = new Chart(ctx, {
+              type: 'line',
+              data: {
+                  labels: CaseDates,
+                  datasets: [{
+                      label: '# of COVID-19 cases',
+                      fill: true,
+                      data: CaseNumbers,
+                      backgroundColor: [
+                        'rgba(20, 50, 200, 0.2)'
+                      ],
+                      borderColor: [
+                          'rgba(20, 50, 200, 0.9)'
+                      ],
+                      borderWidth: 2
+                  }]
+              },
+              options: {
+                legend: {
+                  labels:{
+                    fontColor: "black",
+                    fontSize: 18
+                  }
+                },
+                  scales: {
+                      yAxes: [{
+                          ticks: {
+                            fontColor: "black",
+                              beginAtZero: false
+                          }
+                      }],
+                      xAxes: [{
+                        ticks: {
+                          fontColor: "black",
+                          beginAtZero: false
+                        }
+                      }]
+                  }
+              }
+          });
+          </script>
+
+      </div>
+
+      <div class="col-xl-6 col-lg-12 col-md-12" style="margin-top: 5%;">
+        <div class="text-center">
+
+          <div class="container">
+    <!-- CARD 1 -->
+            <div class="card bg-dark">
+              <div class="card-body">
+                  <h3 class="card-title">Today</h3>
+                  <p class="card-text" style="  margin-top: 35%;">Deaths <br><%= countryCoronaData.data.today.deaths %></p>
+                  <p class="card-text">Confirmed <br><%= countryCoronaData.data.today.confirmed.toLocaleString() %></p>
+              </div>
+            </div>
+    <!-- CARD 2 -->
+            <div class="card bg-dark">
+              <div class="card-body">
+                  <h3 class="card-title">Latest Data</h3>
+                  <p class="card-text" style="  margin-top: 35%;">Deaths <br><%= countryCoronaData.data.latest_data.deaths.toLocaleString() %></p>
+                  <p class="card-text">Confirmed <br><%= countryCoronaData.data.latest_data.confirmed.toLocaleString() %></p>
+                  <p class="card-text">Recovered <br><%= countryCoronaData.data.latest_data.recovered.toLocaleString() %></p>
+              </div>
+            </div>
+    <!-- CARD 3 -->
+            <div class="card bg-dark">
+              <div class="card-body">
+                  <h3 class="card-title">Info</h3>
+                  <p class="card-text" style="  margin-top: 35%;">Cases Per million <br><%= countryCoronaData.data.latest_data.calculated.cases_per_million_population %></p>
+                  <p class="card-text">Death Rate <br><%= countryCoronaData.data.latest_data.calculated.death_rate.toFixed(4) %> %</p>
+                  <p class="card-text">Recovery Rate <br><%= countryCoronaData.data.latest_data.calculated.recovery_rate.toFixed(4) %> %</p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+  </section>
+
+
+
+<%- include("footer") -%>

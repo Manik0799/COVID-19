@@ -1,0 +1,59 @@
+<%- include("header") -%>
+
+
+<section id="homePage">
+  <div class="container-fluid">
+
+    <form  action="/" method="post">
+      <div class="row justify-content-end">
+        <div class="col-lg-12 col-sm-12">
+          <div class="text-center">
+            <input type="text" name="country"  placeholder="Country Name " style="width : 35%; height: 4em; padding: 5px; text-align: center;border-radius: 10px; border: 1.2px solid black;">
+            <button type="submit" name="goButton" class="btn btn-lg btn-primary ml-2">Search <i class="fa fa-search" aria-hidden="true"></i></button>
+          </div>
+          </div>
+      </div>
+    </form>
+
+
+<!-- Code to get the live Data -->
+    <% let currTime= new Date(); %>
+    <% let updateTime= totalData.updated; %>
+    <% let timeDiff= currTime.getTime() - updateTime; %>
+    <% let differenceDate = new Date(timeDiff); %>
+    <% let diffMinutes = differenceDate.getUTCMinutes(); %>
+
+
+    <div id= "liveInfo">
+      <p style="color: white; margin-top: 5px;">
+        * Updated <%= diffMinutes %> mins ago
+      </p>
+      <div class="row" style="color: #E4E5E6;">
+          <div class="col-md-4 col-sm-6 mt-4">
+            <h1>Cases  <br><%=totalData.cases.toLocaleString()%> </h1>
+          </div>
+          <div class="col-md-4 col-sm-6 mt-4">
+            <h1>Deaths  <br><%=totalData.deaths.toLocaleString()%> </h1>
+          </div>
+          <div class="col-md-4 col-sm-6 mt-4">
+            <h1>Recovered <br><%=totalData.recovered.toLocaleString()%> </h1>
+          </div>
+          <div class="col-md-4 col-sm-6 mt-4">
+            <h1>Active Cases  <br><%=totalData.active.toLocaleString()%> </h1>
+          </div>
+          <div class="col-md-4 col-sm-6 mt-4">
+            <h1>Affected Countries  <br><%=totalData.affectedCountries%> </h1>
+          </div>
+        </div>
+
+    </div>
+
+
+
+  </div>
+
+
+</section>
+
+
+<%- include("footer") -%>
